@@ -30,8 +30,11 @@ export function StudentDashboard() {
         `);
 
       if (searchQuery) {
-        // Use array_overlap for better skill matching
-        query = query.contains('skillset', [searchQuery.toLowerCase().trim()]);
+        // Convert search query to lowercase for case-insensitive comparison
+        const searchTerm = searchQuery.toLowerCase().trim();
+        
+        // Use a custom filter function to match exact skills case-insensitively
+        query = query.filter('skillset', 'cs', `{${searchTerm}}`);
       }
 
       const { data, error } = await query;

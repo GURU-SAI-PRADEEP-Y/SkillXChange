@@ -24,25 +24,48 @@ export async function sendBookingEmails(booking: BookingEmailProps) {
     };
 
     // Send email to student
-    await supabase.functions.invoke('send-email', {
+    const { data: studentEmailData, error: studentEmailError } = await supabase.functions.invoke('send-email', {
       body: {
         to: booking.student_email,
+        from: 'SkillXchange <notifications@skillxchange.com>',
         subject: 'Your Scheduled Session on SkillXchange',
-        content: generateStudentEmail(emailData),
-        contentType: 'text/html'
+        html: generateStudentEmail(emailData),
       }
     });
 
+    if (studentEmailError) {
+      console.error('Error sending student email:', studentEmailError);
+      // Continue with mentor email even if student email fails
+    }
+
     // Send email to mentor
-    await supabase.functions.invoke('send-email', {
+    const { data: mentorEmailData, error: mentorEmailError } = await supabase.functions.invoke('send-email', {
       body: {
         to: booking.mentor_email,
+        from: 'SkillXchange <notifications@skillxchange.com>',
         subject: 'Your Upcoming Mentorship Session on SkillXchange',
-        content: generateMentorEmail(emailData),
-        contentType: 'text/html'
+        html: generateMentorEmail(emailData),
       }
     });
+
+    if (mentorEmailError) {
+      console.error('Error sending mentor email:', mentorEmailError);
+      // Continue execution even if mentor email fails
+    }
+
+    // Return success even if one email succeeds
+    return {
+      success: true,
+      studentEmail: !studentEmailError,
+      mentorEmail: !mentorEmailError
+    };
+
   } catch (error) {
-    console.error('Error sending booking emails:', error);
+    console.error('Error in sendBookingEmails:', error);
+    // Don't throw the error, return a status object instead
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to send booking emails'
+    };
   }
 }

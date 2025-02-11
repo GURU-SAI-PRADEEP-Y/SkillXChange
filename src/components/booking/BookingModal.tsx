@@ -43,6 +43,7 @@ export function BookingModal({ mentorId, onClose, onBookingComplete, gigTitle }:
       setSlots(data || []);
     } catch (error) {
       console.error('Error loading slots:', error);
+      setError('Failed to load available time slots');
     } finally {
       setLoading(false);
     }
@@ -90,7 +91,7 @@ export function BookingModal({ mentorId, onClose, onBookingComplete, gigTitle }:
       }
 
       // Send confirmation emails
-      await sendBookingEmails({
+      const emailResult = await sendBookingEmails({
         student_email: studentProfile.data.email,
         mentor_email: mentorProfile.data.email,
         start_time: startTime,
@@ -98,6 +99,11 @@ export function BookingModal({ mentorId, onClose, onBookingComplete, gigTitle }:
         student_name: studentProfile.data.full_name,
         gig_title: gigTitle
       });
+
+      if (!emailResult.success) {
+        console.warn('Emails may not have been sent successfully:', emailResult.error);
+        // Continue with booking completion even if emails fail
+      }
 
       onBookingComplete();
     } catch (err: any) {

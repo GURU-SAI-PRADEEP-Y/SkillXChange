@@ -91,10 +91,10 @@ export function MentorDashboard() {
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">My Gigs</h1>
             <div className="flex gap-4">
-              {/* <Button variant="secondary" onClick={() => setShowChats(!showChats)}>
+              <Button variant="secondary" onClick={() => setShowChats(!showChats)}>
                 <MessageCircle className="h-5 w-5 mr-2" />
                 Messages
-              </Button> */}
+              </Button>
               <Link to="/mentor/gigs/create">
                 <Button>
                   <Plus className="h-5 w-5 mr-2" />
