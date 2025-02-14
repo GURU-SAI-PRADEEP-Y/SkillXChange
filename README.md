@@ -10,11 +10,14 @@ I have added the landing page to user for knowing about my website to freelance 
 I am using the SUPABASE for the database.
 
 SUPABASE :
+
 To connect the supabase, first you have to create a supabase account and create one organization ans name it.
 
 And next create a tables to work with variable data in the website.
 
 Now, to set the EDGE FUNCTION for the send_email :
+
+![Image](https://github.com/user-attachments/assets/34162a3a-027d-4c43-b751-7fe5d1cdf2c7)
 
 1) Install Supabase CLI locally:
 npm install -g supabase
